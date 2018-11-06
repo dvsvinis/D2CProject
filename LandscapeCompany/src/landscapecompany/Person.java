@@ -28,32 +28,32 @@ public class Person {
         return firstName.get();
     }
 
-    public void setFirstName(SimpleStringProperty firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String firstName) {
+        this.firstName.set(firstName);
     }
 
     public String getLastName() {
         return lastName.get();
     }
 
-    public void setLastName(SimpleStringProperty lastName) {
-        this.lastName = lastName;
+    public void setLastName(String lastName) {
+        this.lastName.set(lastName);
     }
 
     public String getPhone() {
         return phone.get();
     }
 
-    public void setPhone(SimpleStringProperty phone) {
-        this.phone = phone;
+    public void setPhone(String phone) {
+        this.phone.set(phone);
     }
 
     public String getEmail() {
         return email.get();
     }
 
-    public void setEmail(SimpleStringProperty email) {
-        this.email = email;
+    public void setEmail(String email) {
+        this.email.set(email);
     }
 
     @Override
