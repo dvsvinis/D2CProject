@@ -12,10 +12,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
 /**
@@ -49,6 +52,16 @@ public class ContactTableViewController implements Initializable {
         
         //load dummy data from getPeople Method below
         tableView.setItems(getPeople());
+        
+        //this will allow the table to select multiple rows at once
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); 
+        
+        //update table to allow for the fields to be edited
+        tableView.setEditable(true);
+        firstNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        lastNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        phoneColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        emailColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     }    
     
     /**
@@ -67,8 +80,20 @@ public class ContactTableViewController implements Initializable {
         return people;
     }
     
+    /**this method will allow the user to delete the selected row(s) from the table */
+    public void deleteButtonPushed() {
+        ObservableList<Person> selectedRows, allPeople;
+        allPeople = tableView.getItems();
+        //this tives us the rows that were selected
+        selectedRows = tableView.getSelectionModel().getSelectedItems();
+        //loop over the selected rows and remove the Person objects from the table
+        for (Person person: selectedRows) {
+            allPeople.remove(person);
+        }//end for
+    }
+    
      /**
-     * When this method is called it will change the Scene back to the home page
+     * This method will change the Scene back to the home page when a button is pushed
      */  
         @FXML
     private void changeScreenButtonPushed(ActionEvent event) throws IOException {
@@ -79,7 +104,7 @@ public class ContactTableViewController implements Initializable {
         app_stage.show();
     }
     
-    /** This method will create a new Person and add it to the table */
+    /** This method will allow user to create a new Person and add it to the table */
     public void newPersonButtonPushed(){
         //create new Person object
        Person newPerson = new Person (firstNameTextField.getText(),
@@ -90,5 +115,41 @@ public class ContactTableViewController implements Initializable {
        //Get all items from table as a list, then add the new person to the list
        tableView.getItems().add(newPerson);
        
+    }
+    
+    /**This method will allow the user to double click on a cell and update
+     * the first name of the person.
+     */
+    public void changeFirstNameCellEvent(CellEditEvent editedCell){
+        //this returns a Person object
+        Person personSelected = tableView.getSelectionModel().getSelectedItem();
+        personSelected.setFirstName(editedCell.getNewValue().toString());
+    }
+    
+    /**This method will allow the user to double click on a cell and update
+     * the last name of the person.
+     */
+    public void changelastNameCellEvent(CellEditEvent editedCell){
+        //this returns a Person object
+        Person personSelected = tableView.getSelectionModel().getSelectedItem();
+        personSelected.setLastName(editedCell.getNewValue().toString());
+    }
+    
+    /**This method will allow the user to double click on a cell and update
+     * the phone number of the person.
+     */
+    public void changePhoneCellEvent(CellEditEvent editedCell){
+        //this returns a Person object
+        Person personSelected = tableView.getSelectionModel().getSelectedItem();
+        personSelected.setPhone(editedCell.getNewValue().toString());
+    }
+    
+    /**This method will allow the user to double click on a cell and update
+     * the email of the person.
+     */
+    public void changeEmailCellEvent(CellEditEvent editedCell){
+        //this returns a Person object
+        Person personSelected = tableView.getSelectionModel().getSelectedItem();
+        personSelected.setEmail(editedCell.getNewValue().toString());
     }
 }
